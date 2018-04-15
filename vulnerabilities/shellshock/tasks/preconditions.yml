@@ -1,0 +1,10 @@
+- name: Check bash existance
+  command: bash --version
+  register: bash_version
+  failed_when: bash_version.rc != 0
+  tags: precondition
+
+- fail:
+    msg: Debian/Ubuntu distribution is required for Shellshock vulnerability script right now
+  when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'
+  tags: precondition

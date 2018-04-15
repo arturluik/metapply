@@ -1,0 +1,5 @@
+- name: Ensure ProFTPd service is running
+  service:
+    name: proftpd
+    state: started
+  tags: postcondition

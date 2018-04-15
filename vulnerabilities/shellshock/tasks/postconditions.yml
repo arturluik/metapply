@@ -1,0 +1,6 @@
+- name: Verify that Bash 4.2 is installed
+  command: bash --version
+  register: bash_version
+  failed_when: bash_version.stdout.find('version 4.2.0') == -1
+  tags: postcondition
+

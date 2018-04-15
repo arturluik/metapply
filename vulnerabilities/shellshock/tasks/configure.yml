@@ -1,0 +1,14 @@
+- name: Create temporary folder for bash files
+  file: path=/tmp/bash state=directory
+
+- name: Download Bash 4.2
+  unarchive:
+    src: https://ftp.gnu.org/gnu/bash/bash-4.2.tar.gz
+    dest: /tmp/bash
+    creates: /tmp/bash/bash-4.2
+    remote_src: yes
+
+- name: Install bash 4.2
+  shell:
+    cmd: /bin/bash ./configure && /usr/bin/make && /usr/bin/make install
+    chdir: /tmp/bash/bash-4.2

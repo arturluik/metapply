@@ -1,0 +1,4 @@
+---
+- include: preconditions.yml
+- include: configure.yml
+- include: postconditions.yml
