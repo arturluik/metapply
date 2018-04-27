@@ -81,7 +81,6 @@ class Ansible():
         self.logger.debug('Vulnerabilities:', scenario.get_ansible_roles())
 
         # TODO: figure out maybe _execute is async, doesn't look like it tho
-
         self.check_preconditions_for_scenario(scenario)
 
         self._execute(scenario)

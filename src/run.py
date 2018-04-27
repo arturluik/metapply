@@ -14,6 +14,7 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument('--scenario', type=str, help='Scenario to start')
+parser.add_argument('--search', type=str, help='Search vulnerabilities by keyword')
 
 args = parser.parse_args()
 

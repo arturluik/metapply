@@ -1,18 +1,6 @@
 - name: Create temporary folder for bash files
   file: path=/tmp/proftpd state=directory
 
-# - name: Download ProFTPd 1.3.3a
-#   unarchive:
-#     src: https://github.com/downloads/proftpd/proftpd.github.com/proftpd-1.3.3a.tar.gz
-#     dest: /tmp/proftpd
-#     creates: /tmp/proftpd/proftpd-1.3.3a
-#     remote_src: yes
-
-# - name: Compile and install ProtFtpd 1.3.3a
-#   shell:
-#     cmd: ./configure && /usr/bin/make && /usr/bin/make install
-#     chdir: /tmp/proftpd/proftpd-1.3.3a
-
 - name: Create init.d configuration
   copy:
       src: files/proftpd.init.d
@@ -31,7 +19,3 @@
       dest: /etc/proftpd/proftpd.conf
       mode: 644
 
-# - name: Install bash 4.2
-#   shell:
-#     cmd: /bin/bash ./configure && /usr/bin/make && /usr/bin/make install
-#     chdir: /tmp/bash/bash-4.2
