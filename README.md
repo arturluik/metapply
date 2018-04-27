@@ -5,10 +5,16 @@ The purpose of this project is to reduce the amount of time required for prepari
 
 Paper: https://drive.google.com/file/d/1BewMaLnhv4OpB5lwccBN8H5Ht2MQwK8m/view?usp=sharing
 
+*This is first prototype of the framework, feel free to contribute*
+
+# Terminology
+* Host - the machine where you run this script
+* Target - the machine which needs to be vulnerable
+* Scenario - hosts / vulnerabilities configuration - to specify which vulnerabilities need to exist in the targets
 
 # Requirements
-- Python 3
-- Ansible 2.5+
+- Python 3 (in the target machines as well)
+- Ansible 2.5+ (host machine only)
 
 # Development
 The development can be seperated to two parts - metapply core development and module development.
@@ -57,6 +63,15 @@ targets:
 Run the scenario
 ```
 python3 src/run.py --scenario examples/example.yml
+```
+
+# Known problems
+## Ansible needs sudo withput password and ssh-key
+Solution:
+
+```
+/etc/sudoers
+%sudo   ALL=(ALL:ALL) NOPASSWD: ALL
 ```
 
 # License

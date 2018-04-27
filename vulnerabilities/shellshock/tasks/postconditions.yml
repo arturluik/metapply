@@ -4,3 +4,8 @@
   failed_when: bash_version.stdout.find('version 4.2.0') == -1
   tags: postcondition
 
+- name: Check whether bash is vulnerable to shellshock
+  command: "/bin/bash -c \"x='() { :;}; echo VULNERABLE' bash -c :\""
+  register: bash_shellshock_test
+  failed_when: bash_shellshock_test.stdout.find('VULNERABLE') != 0
+  tags: postcondition

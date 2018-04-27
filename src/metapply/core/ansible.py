@@ -1,6 +1,7 @@
 
 from metapply.config import Config
 from metapply.core.logger import Logger
+import getpass
 from pprint import pprint
 import json
 import shutil
@@ -67,27 +68,42 @@ class Ansible():
         # Overwrite to use only frame roles ... (not good though)
         C.DEFAULT_ROLES_PATH = [self.config.get('vulnerabilities_path')]
 
-    def check_preconditions_for_scenario(self, scenario, on_success=(lambda: True)):
+    def check_preconditions_for_scenario(self, scenario, on_success=(lambda: True), user=None):
         self.logger.info('Checking preconditions')
-        self._execute(scenario, on_success=on_success, tags=['precondition'])
+        self._execute(
+            scenario,
+            on_success=on_success,
+            tags=['precondition'],
+            user=user
+        )
 
-    def check_postconditions_for_scenario(self, scenario, on_success=(lambda: True)):
+    def check_postconditions_for_scenario(self, scenario, on_success=(lambda: True), user=None):
         self.logger.info('Checking postconditions')
-        self._execute(scenario, tags=['postcondition'], on_success=on_success)
+        self._execute(
+            scenario,
+            tags=['postcondition'],
+            on_success=on_success,
+            user=user
+        )
 
-    def execute_scenario(self, scenario, on_success=(lambda: True)):
+    def execute_scenario(self, scenario, on_success=(lambda: True), user=None):
+        if user is None:
+            user = getpass.getuser()
+
         self.logger.debug('Executing ansible for scenario')
         self.logger.debug('Targets:', scenario.targets)
         self.logger.debug('Vulnerabilities:', scenario.get_ansible_roles())
 
         # TODO: figure out maybe _execute is async, doesn't look like it tho
-        self.check_preconditions_for_scenario(scenario)
+        self.check_preconditions_for_scenario(scenario, user=user)
 
-        self._execute(scenario)
+        self._execute(scenario, user=user)
 
-        self.check_postconditions_for_scenario(scenario, on_success=on_success)
+        self.check_postconditions_for_scenario(
+            scenario, on_success=on_success, user=user
+        )
 
-    def _execute(self, scenario, tags=[], check=False, on_success=(lambda: True)):
+    def _execute(self, scenario, tags=[], check=False, on_success=(lambda: True), user=None):
         # initialize needed objects
         loader = DataLoader()
         options = Options(connection='ssh',
@@ -96,7 +112,7 @@ class Ansible():
                           module_path=None,
                           tags=tags,
                           sudo=True,
-                          remote_user='osboxes',
+                          remote_user=user,
                           become_method='sudo',
                           become_user='root',
                           check=check,
@@ -148,3 +164,5 @@ class Ansible():
 
             # Remove ansible tmpdir
             shutil.rmtree(C.DEFAULT_LOCAL_TMP, True)
+
+            self.logger.debug('Ansible play cleaned up')
