@@ -66,7 +66,7 @@ python3 src/run.py --scenario examples/example.yml
 ```
 
 # Known problems
-## Ansible needs sudo withput password and ssh-key
+## Ansible needs sudo without password and ssh-key
 Solution:
 
 ```
