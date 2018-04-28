@@ -99,7 +99,7 @@ class Ansible():
         # Ansible somehow doesn't want to run twice the same role ... (bug? figure out pls)
         # self.check_preconditions_for_scenario(scenario, user=user)
 
-        self._execute(scenario, user=user, gather_facts='false')
+        self._execute(scenario, user=user)
 
         # self.check_postconditions_for_scenario(
         #     scenario, on_success=on_success, user=user
