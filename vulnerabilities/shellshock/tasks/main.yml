@@ -1,4 +1,4 @@
 ---
-- include: preconditions.yml
+# - include: preconditions.yml
 - include: configure.yml
-- include: postconditions.yml
+# - include: postconditions.yml

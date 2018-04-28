@@ -67,6 +67,7 @@ class Ansible():
 
         # Overwrite to use only frame roles ... (not good though)
         C.DEFAULT_ROLES_PATH = [self.config.get('vulnerabilities_path')]
+        # C.DEFAULT_DEBUG = True
 
     def check_preconditions_for_scenario(self, scenario, on_success=(lambda: True), user=None):
         self.logger.info('Checking preconditions')
@@ -95,15 +96,16 @@ class Ansible():
         self.logger.debug('Vulnerabilities:', scenario.get_ansible_roles())
 
         # TODO: figure out maybe _execute is async, doesn't look like it tho
+        # Ansible somehow doesn't want to run twice the same role ... (bug? figure out pls)
         # self.check_preconditions_for_scenario(scenario, user=user)
 
-        self._execute(scenario, user=user)
+        self._execute(scenario, user=user, gather_facts='false')
 
-        self.check_postconditions_for_scenario(
-            scenario, on_success=on_success, user=user
-        )
+        # self.check_postconditions_for_scenario(
+        #     scenario, on_success=on_success, user=user
+        # )
 
-    def _execute(self, scenario, tags=[], check=False, on_success=(lambda: True), user=None):
+    def _execute(self, scenario, tags=[], check=False, on_success=(lambda: True), user=None, gather_facts='true'):
         # initialize needed objects
         loader = DataLoader()
         options = Options(connection='ssh',
@@ -131,9 +133,9 @@ class Ansible():
 
         # create play with tasks
         play_source = dict(
-            name="Dynamic ansible playbook",
+            name="Dynamic ansible playbook - " + ' '.join(tags),
             hosts=hosts,
-            gather_facts='true',
+            gather_facts=gather_facts,
             roles=scenario.get_ansible_roles()
         )
         play = Play().load(play_source, variable_manager=variable_manager, loader=loader)
